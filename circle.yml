@@ -1,13 +1,13 @@
 machine:
-  python:
-    version: 2.7.12
   post:
-    - pyenv global 3.5.2
+    - pyenv global 2.7.12 3.5.2
 
 dependencies:
   pre:
     - pip install -r requirements.txt
+    - pip install mock
 
 test:
   override:
-    - python3.5 manage.py test
+    - python3 manage.py test
+    - python2 manage.py test
