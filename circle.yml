@@ -1,6 +1,12 @@
 machine:
   python:
     version: 3.5.2
+    
+  services:
+    - postgresql
+  
+  environment:
+    DB : "postgres"
 
 dependencies:
   pre:
@@ -9,14 +15,14 @@ dependencies:
   override:
     - pip install -r requirements.txt
     - pip install mock
-
+    
 deployment:
   staging:
     branch: develop
     heroku:
       appname: healthchecks-turquoise-staging
 
-  staging:
+  production:
     branch: master
     heroku:
       appname: healthchecks-turquoise
