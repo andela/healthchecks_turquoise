@@ -18,7 +18,7 @@ dependencies:
     
 deployment:
   staging:
-    branch: ch-intergrate-circleci-134419027
+    branch: develop
     heroku:
       appname: healthchecks-turquoise-staging
 
