@@ -1,4 +1,7 @@
 # healthchecks
+[![Code Climate](https://codeclimate.com/github/andela/healthchecks_turquoise/badges/gpa.svg)](https://codeclimate.com/github/andela/healthchecks_turquoise)
+
+[![Test Coverage](https://codeclimate.com/github/andela/healthchecks_turquoise/badges/coverage.svg)](https://codeclimate.com/github/andela/healthchecks_turquoise/coverage)
 
 ![Screenshot of Welcome page](/stuff/screenshots/welcome.png?raw=true "Welcome Page")
 
