@@ -17,13 +17,13 @@ dependencies:
     - pip install mock
     
 deployment:
-  staging:
-    branch: develop
-    heroku:
-      appname: healthchecks-turquoise-staging
-
   production:
-    branch: master
-    heroku:
-      appname: healthchecks-turquoise
+    branch: ch-intergrate-circleci-134419027
+    commands:
+      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku auth:token
+      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:on --app healthchecks-turquoise-prod
+      - git push git@heroku.com:healthchecks-turquoise-prod.git $CIRCLE_SHA1:refs/heads/master --force
+      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku run python manage migrate --app healthchecks-turquoise-prod
+      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:off --app healthchecks-turquoise-prod
+
 
