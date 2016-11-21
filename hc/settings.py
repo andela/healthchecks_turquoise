@@ -154,7 +154,5 @@ if os.path.exists(os.path.join(BASE_DIR, "hc/local_settings.py")):
 else:
     warnings.warn("local_settings.py not found, using defaults")
 
-# Customization for  database CI connection
-if os.path.exists(os.path.join(BASE_DIR, "hc/test_local_settings.py")):
-    from .test_local_settings import *
-
+if os.path.exists(os.path.join(BASE_DIR, "hc/test_settings.py")):
+    from .test_settings import *
