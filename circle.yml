@@ -26,7 +26,7 @@ deployment:
       - HEROKU_API_KEY=$HEROKU_API_KEY_STAGING heroku maintenance:off --app healthchecks-turquoise-staging
 
   production:
-    branch: ch-intergrate-circleci-134419027
+    branch: master
     commands:
       - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:on --app healthchecks-turquoise-prod
       - git push git@heroku.com:healthchecks-turquoise-prod.git $CIRCLE_SHA1:refs/heads/master --force
