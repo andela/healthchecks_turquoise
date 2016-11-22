@@ -1,5 +1,7 @@
 # healthchecks
 
+[![CircleCI](https://circleci.com/gh/andela/healthchecks_turquoise/tree/master.svg?style=svg)](https://circleci.com/gh/andela/healthchecks_turquoise/tree/master) [![Code Climate](https://codeclimate.com/github/andela/healthchecks_turquoise/badges/gpa.svg)](https://codeclimate.com/github/andela/healthchecks_turquoise) [![Test Coverage](https://codeclimate.com/github/andela/healthchecks_turquoise/badges/coverage.svg)](https://codeclimate.com/github/andela/healthchecks_turquoise/coverage)
+
 ![Screenshot of Welcome page](/stuff/screenshots/welcome.png?raw=true "Welcome Page")
 
 ![Screenshot of My Checks page](/stuff/screenshots/my_checks.png?raw=true "My Checks Page")
