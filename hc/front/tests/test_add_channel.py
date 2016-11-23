@@ -39,13 +39,14 @@ class AddChannelTestCase(BaseTestCase):
 
     ### Test that the team access works
     def test_team_access_works(self):
-        url = "/integrations/%s/checks/" % self.channel.code
-
-        # Logging in as bob, not alice. Bob has team access so this
-        # should work.
+        url = "/integrations/add/"
+        form = {"kind": "email", "value": "bob@example.org"}
         self.client.login(username="bob@example.org", password="password")
-        r = self.client.get(url)
-        self.assertContains(r, "Assign Checks to Channel", status_code=200)
+        self.client.post(url, form)
+    
+        ch = Channel.objects.get()
+        # Added by bob, but should belong to alice (bob has team access)
+        self.assertEqual(ch.user, self.alice)
 
     ### Test that bad kinds don't work
     def test_bad_kinds_fail(self):
