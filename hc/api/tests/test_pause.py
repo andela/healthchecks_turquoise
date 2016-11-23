@@ -13,6 +13,9 @@ class PauseTestCase(BaseTestCase):
                              HTTP_X_API_KEY="abc")
 
         ### Assert the expected status code and check's status
+        check.refresh_from_db()
+        assert r.status_code == 200
+        assert check.status == 'paused'
 
     def test_it_validates_ownership(self):
         check = Check(user=self.bob, status="up")
