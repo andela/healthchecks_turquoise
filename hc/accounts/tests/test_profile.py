@@ -1,12 +1,11 @@
 from django.core import mail
 
-from hc.test import BaseTestCase
 from hc.accounts.models import Member
 from hc.api.models import Check
+from hc.test import BaseTestCase
 
 
 class ProfileTestCase(BaseTestCase):
-
     def test_it_sends_set_password_link(self):
         self.client.login(username="alice@example.org", password="password")
 
@@ -17,9 +16,15 @@ class ProfileTestCase(BaseTestCase):
         # profile.token should be set now
         self.alice.profile.refresh_from_db()
         token = self.alice.profile.token
-        ### Assert that the token is set
 
+        ### Assert that the token is set
+        assert token is not None
+        
         ### Assert that the email was sent and check email content
+        assert len(mail.outbox) > 0
+        self.assertEqual('Set password on healthchecks.io', mail.outbox[0].subject)
+        self.assertIn(self.alice.email, mail.outbox[0].to)
+        self.assertIn("Here's a link to set a password for your account on healthchecks.io", mail.outbox[0].body)
 
     def test_it_sends_report(self):
         check = Check(name="Test Check", user=self.alice)
@@ -107,4 +112,4 @@ class ProfileTestCase(BaseTestCase):
         # Expect only Alice's tags
         self.assertNotContains(r, "bobs-tag.svg")
 
-    ### Test it creates and revokes API key
+        ### Test it creates and revokes API key
