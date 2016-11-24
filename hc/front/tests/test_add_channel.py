@@ -43,11 +43,15 @@ class AddChannelTestCase(BaseTestCase):
         form = {"kind": "email", "value": "bob@example.org"}
         self.client.login(username="bob@example.org", password="password")
         self.client.post(url, form)
-    
+
         ch = Channel.objects.get()
-        # Added by bob, but should belong to alice (bob has team access)
         self.assertEqual(ch.user, self.alice)
 
     ### Test that bad kinds don't work
-    def test_bad_kinds_fail(self):
-        pass
+    def test_rejects_bad_kinds(self):
+        url = "/integrations/add/"
+        form = {"kind": "Mouse", "value": "Jerry"}
+
+        self.client.login(username="alice@example.org", password="password")
+        r = self.client.post(url, form)
+        assert r.status_code == 400, r.status_code
