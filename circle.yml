@@ -14,7 +14,15 @@ dependencies:
 
   override:
     - pip install -r requirements.txt
-    - pip install mock
+    - pip install mock coverage coveralls
+
+test:
+  pre:
+    - python manage.py collectstatic --noinput
+  override:
+    - coverage run --omit=*/tests/* --source=hc manage.py test --noinput
+  post:
+    - coveralls
     
 deployment:
   staging:
