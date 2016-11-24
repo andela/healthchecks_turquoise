@@ -13,10 +13,8 @@ class AddCheckTestCase(BaseTestCase):
 
     ### Test that team access works
     def test_team_access_works(self):
-        url = "/integrations/%s/checks/" % self.channel.code
+        url = "/checks/add/"
 
-        # Logging in as bob, not alice. Bob has team access so this
-        # should work.
         self.client.login(username="bob@example.org", password="password")
         r = self.client.get(url)
-        self.assertContains(r, "Assign Checks to Channel", status_code=200)
+        self.assertContains(r, "Assign Checks to add", status_code=200)
