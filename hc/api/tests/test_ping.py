@@ -84,4 +84,11 @@ class PingTestCase(TestCase):
         self.assertNotEqual(self.check.status, "paused")
 
     ### Test that a post to a ping works
+    def test_post_request_to_ping_works(self):
+        """
+        A POST request to ping view should work
+        """
+        res = self.client.post("/ping/{}/".format(self.check.code))
+        self.assertEqual(res.status_code, 200)
+
     ### Test that the csrf_client head works
