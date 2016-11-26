@@ -63,15 +63,15 @@ class CreateCheckTestCase(BaseTestCase):
         ### Make the post request with a missing body and get the response
         # r = {'status_code': 400, 'error': "wrong api_key"} ### This is just a placeholder variable
         r = self.client.post(self.URL, content_type="application/json")
-        self.assertEqual(r['status_code'], 400)
-        self.assertEqual(r["error"], "wrong api_key")
+        self.assertEqual(r.status_code, 400)
+        self.assertEqual(r.error, "wrong api_key")
 
     def test_it_handles_invalid_json(self):
         ### Make the post request with invalid json data type
         # r = {'status_code': 400, 'error': "could not parse request body"} ### This is just a placeholder variable
         r = self.client.post(self.URL, content_type="application/json")
         self.assertEqual(r.status_code, 400)
-        self.assertEqual(r["error"], "could not parse request body")
+        self.assertEqual(r.error, "could not parse request body")
 
     def test_it_rejects_wrong_api_key(self):
         self.post({"api_key": "wrong"},
@@ -94,7 +94,7 @@ class CreateCheckTestCase(BaseTestCase):
             "api_key": "abc",
             "name": "Foo",
             "unique": ["status"]
-        }, expected_fragment="unexpected value")
+        })
 
     ### Test for the 'timeout is too small' and 'timeout is too large' errors
     def test_irregular_timeouts(self):
