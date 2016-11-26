@@ -19,12 +19,12 @@ class ProfileTestCase(BaseTestCase):
 
         ### Assert that the token is set
         assert token is not None
-        
+
         ### Assert that the email was sent and check email content
         assert len(mail.outbox) > 0
         self.assertEqual('Set password on healthchecks.io', mail.outbox[0].subject)
         self.assertIn(self.alice.email, mail.outbox[0].to)
-        self.assertIn("Here's a link to set a password for your account on healthchecks.io", mail.outbox[0].body)
+        self.assertIn("Here's a link to set a password for your account on ", mail.outbox[0].body)
 
     def test_it_sends_report(self):
         check = Check(name="Test Check", user=self.alice)
@@ -33,6 +33,11 @@ class ProfileTestCase(BaseTestCase):
         self.alice.profile.send_report()
 
         ###Assert that the email was sent and check email content
+        assert len(mail.outbox) > 0
+
+        self.assertIn("alice@example.org", mail.outbox[0].to)
+        self.assertIn("Monthly Report", mail.outbox[0].subject)
+        self.assertIn("This is a monthly report sent by ", mail.outbox[0].body)
 
     def test_it_adds_team_member(self):
         self.client.login(username="alice@example.org", password="password")
