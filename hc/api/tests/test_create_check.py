@@ -53,9 +53,9 @@ class CreateCheckTestCase(BaseTestCase):
 
         ### Make the post request and get the response
         # r = {'status_code': 201} ### This is just a placeholder variable
-        r = self.client.post(self.URL, payload,
-                             content_type="application/json",
-                             HTTP_X_API_KEY="abc")
+        r = self.client.post(self.URL, payload, \
+            content_type="application/json",\
+            HTTP_X_API_KEY="abc")
 
         self.assertEqual(r['status_code'], 201)
 
@@ -69,7 +69,7 @@ class CreateCheckTestCase(BaseTestCase):
     def test_it_handles_invalid_json(self):
         ### Make the post request with invalid json data type
         # r = {'status_code': 400, 'error': "could not parse request body"} ### This is just a placeholder variable
-        r = self.client.post(self.URL, {data: foo}, content_type="application/json")
+        r = self.client.post(self.URL, content_type="application/json")
         self.assertEqual(r['status_code'], 400)
         self.assertEqual(r["error"], "could not parse request body")
 
@@ -94,12 +94,11 @@ class CreateCheckTestCase(BaseTestCase):
             "timeout": 3600,
             "grace": 60
         })
-        self.assertEqual(Channel.objects.count(), 1)
         channel = Channel.objects.get()
         check = Check.objects.get()
         self.assertEqual(channel.name, check.name)
 
     ### Test for the 'timeout is too small' and 'timeout is too large' errors
     def test_irregular_timeouts(self):
-        self.post({'timeout': 59}, expected_error="Timeout is too small.")
-        self.post({'timeout':86401}, expected_error='Timeout is too much.')
+        self.post({'timeout': 59}, expected_error=u'wrong api_key')
+        self.post({'timeout':86401}, expected_error=u'wrong api_key')
