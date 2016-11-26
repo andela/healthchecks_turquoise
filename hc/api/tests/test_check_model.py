@@ -28,9 +28,9 @@ class CheckModelTestCase(TestCase):
         ### The above 2 asserts fail. Make them pass
         # option: 1
         if check.in_grace_period():
-            self.assertEqual(check.get_status(), "down")
-        else:
             self.assertEqual(check.get_status(), "up")
+        else:
+            self.assertEqual(check.get_status(), "down")
         # option: 2
         # self.assertFalse(check.in_grace_period())
         # self.assertNotEqual(check.get_status(), "up")
