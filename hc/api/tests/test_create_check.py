@@ -64,7 +64,7 @@ class CreateCheckTestCase(BaseTestCase):
         # r = {'status_code': 400, 'error': "wrong api_key"} ### This is just a placeholder variable
         r = self.client.post(self.URL, content_type="application/json")
         self.assertEqual(r.status_code, 400)
-        self.assertEqual(r.error, "wrong api_key")
+        self.assertEqual(r.json()['error'], "wrong api_key")
 
     def test_it_handles_invalid_json(self):
         ### Make the post request with invalid json data type
