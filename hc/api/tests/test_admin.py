@@ -9,8 +9,8 @@ class ApiAdminTestCase(BaseTestCase):
         self.check = Check.objects.create(user=self.alice, tags="foo bar")
 
         ### Set Alice to be staff and superuser and save her :)
-        self.alice.is_staff = true
-        self.alice.superuser = true
+        self.alice.is_staff = True
+        self.alice.superuser = True
         self.alice.save()
 
     def test_it_shows_channel_list_with_pushbullet(self):
