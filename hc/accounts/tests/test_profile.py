@@ -122,4 +122,21 @@ class ProfileTestCase(BaseTestCase):
         # Expect only Alice's tags
         self.assertNotContains(r, "bobs-tag.svg")
 
-        ### Test it creates and revokes API key
+    ### Test it creates and revokes API key
+    def test_it_creates_api_key(self):
+        self.client.login(username="alice@example.org", password="password")
+        form = {'create_api_key': ''}
+        r = self.client.post("/accounts/profile/", form)
+        assert r.status_code == 200
+
+        self.alice.refresh_from_db()
+        assert len(self.alice.profile.api_key) > 0
+
+    def test_it_revokes_api_key(self):
+        self.client.login(username="alice@example.org", password="password")
+        form = {'revoke_api_key': ''}
+        r = self.client.post("/accounts/profile/", form)
+        assert r.status_code == 200
+
+        self.alice.refresh_from_db()
+        assert len(self.alice.profile.api_key) == 0
