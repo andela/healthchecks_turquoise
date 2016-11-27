@@ -44,6 +44,7 @@ class ProfileTestCase(BaseTestCase):
 
         form = {"invite_team_member": "1", "email": "frank@example.org"}
         r = self.client.post("/accounts/profile/", form)
+
         assert r.status_code == 200
 
         member_emails = set()
@@ -51,10 +52,14 @@ class ProfileTestCase(BaseTestCase):
             member_emails.add(member.user.email)
 
         ### Assert the existence of the member emails
-
         self.assertTrue("frank@example.org" in member_emails)
+        self.assertTrue("bob@example.org" in member_emails)
+        assert len(mail.outbox) > 0
 
         ###Assert that the email was sent and check email content
+        self.assertIn('frank@example.org', mail.outbox[0].to)
+        self.assertIn("You have been invited to join alice@example.org on ", mail.outbox[0].subject)
+        self.assertIn("You will be able to manage their existing monitoring checks and set up new", mail.outbox[0].body)
 
     def test_add_team_member_checks_team_access_allowed_flag(self):
         self.client.login(username="charlie@example.org", password="password")
