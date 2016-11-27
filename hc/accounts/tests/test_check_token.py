@@ -17,12 +17,25 @@ class CheckTokenTestCase(BaseTestCase):
         r = self.client.post("/accounts/check_token/alice/secret-token/")
         self.assertRedirects(r, "/checks/")
 
-        # After login, token should be blank
+        ### After login, token should be blank
         self.profile.refresh_from_db()
         self.assertEqual(self.profile.token, "")
 
-    ### Login and test it redirects already logged in
+        ### Login and test it redirects already logged in
 
-    ### Login with a bad token and check that it redirects
+        self.client.login(username="alice@example.org", password="password")
 
-    ### Any other tests?
+        
+        response = self.client.get("/accounts/check_token/alice/secret-token/")
+        self.assertRedirects(response, "/checks/")
+
+    
+        ### Login with a bad token and check that it redirects
+    def test_it_redirects_bad_token(self):
+        url = "/accounts/check_token/alice/invalid-token/"
+        response = self.client.post(url, follow=True)
+        self.assertRedirects(response, "/accounts/login/")
+        self.assertContains(response, "incorrect or expired")
+
+
+        ### Any other tests?
