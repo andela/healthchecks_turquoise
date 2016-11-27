@@ -23,7 +23,7 @@ class SwitchTeamTestCase(BaseTestCase):
         url = "/accounts/switch_team/%s/" % self.alice.username
         r = self.client.get(url)
 
-        self.assertEqual(r.status_code, HttpResponseForbidden.status_code)
+        self.assertEqual(r.status_code, 403)
 
     def test_it_switches_to_own_team(self):
         self.client.login(username="alice@example.org", password="password")
@@ -31,3 +31,4 @@ class SwitchTeamTestCase(BaseTestCase):
         url = "/accounts/switch_team/%s/" % self.alice.username
         r = self.client.get(url, follow=True)
         ### Assert the expected error code
+        assert r.status_code == 200
