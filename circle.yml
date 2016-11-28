@@ -33,11 +33,8 @@ deployment:
   production:
     branch: master
     commands:
-      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:on --app healthchecks-turquoise-prod
-      - git push git@heroku.com:healthchecks-turquoise-prod.git $CIRCLE_SHA1:refs/heads/master --force
-      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku run python manage.py collectstatic --noinput
-      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku run python manage.py makemigrations
-      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku run python manage.py migrate --app healthchecks-turquoise-prod
-      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:off --app healthchecks-turquoise-prod
+      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:on --app healthchecks-turquoise
+      - git push git@heroku.com:healthchecks-turquoise.git $CIRCLE_SHA1:refs/heads/master --force
+      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:off --app healthchecks-turquoise
 
 
