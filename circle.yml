@@ -14,7 +14,15 @@ dependencies:
 
   override:
     - pip install -r requirements.txt
-    - pip install mock
+    - pip install mock coverage coveralls
+
+test:
+  pre:
+    - python manage.py collectstatic --noinput
+  override:
+    - coverage run --omit=*/tests/* --source=hc manage.py test --noinput
+  post:
+    - coveralls
     
 deployment:
   staging:
@@ -25,9 +33,8 @@ deployment:
   production:
     branch: master
     commands:
-      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:on --app healthchecks-turquoise-prod
-      - git push git@heroku.com:healthchecks-turquoise-prod.git $CIRCLE_SHA1:refs/heads/master --force
-      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku run python manage.py migrate --app healthchecks-turquoise-prod
-      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:off --app healthchecks-turquoise-prod
+      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:on --app healthchecks-turquoise
+      - git push git@heroku.com:healthchecks-turquoise.git $CIRCLE_SHA1:refs/heads/master --force
+      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:off --app healthchecks-turquoise
 
 
