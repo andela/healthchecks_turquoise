@@ -2,8 +2,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/andela/healthchecks_turquoise/badge.svg?branch=develop)](https://coveralls.io/github/andela/healthchecks_turquoise?branch=develop)
 [![CircleCI](https://circleci.com/gh/andela/healthchecks_turquoise/tree/develop.svg?style=svg)](https://circleci.com/gh/andela/healthchecks_turquoise/tree/develop) 
 [![Code Climate](https://codeclimate.com/github/andela/healthchecks_turquoise/badges/gpa.svg)](https://codeclimate.com/github/andela/healthchecks_turquoise) 
-[![Test Coverage](https://codeclimate.com/github/andela/healthchecks_turquoise/badges/coverage.svg)](https://codeclimate.com/github/andela/healthchecks_turquoise/coverage)
-
 ![Screenshot of Welcome page](/stuff/screenshots/welcome.png?raw=true "Welcome Page")
 
 ![Screenshot of My Checks page](/stuff/screenshots/my_checks.png?raw=true "My Checks Page")
