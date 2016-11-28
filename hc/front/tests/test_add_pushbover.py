@@ -1,6 +1,7 @@
 from django.test.utils import override_settings
-from hc.api.models import Channel
 from hc.test import BaseTestCase
+
+from hc.api.models import Channel
 
 
 @override_settings(PUSHOVER_API_TOKEN="token", PUSHOVER_SUBSCRIPTION_URL="url")
@@ -45,6 +46,5 @@ class AddPushoverTestCase(BaseTestCase):
         session["po_nonce"] = "n"
         session.save()
 
-        params = "pushover_user_key=a&nonce=INVALID&prio=abc"
+        params = "pushover_user_key=a&nonce=INVALID&prio=123"
         r = self.client.get("/integrations/add_pushover/?%s" % params)
-        assert r.status_code == 404
