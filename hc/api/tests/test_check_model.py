@@ -29,7 +29,7 @@ class CheckModelTestCase(TestCase):
         else:
             self.assertEqual(check.get_status(), "down")
         # option: 2
-        # self.assertFalse(check.in_grace_period())
+        # self.assertFalse(check.in_grace_period()) 
         # self.assertNotEqual(check.get_status(), "up")
 
     def test_paused_check_is_not_in_grace_period(self):
