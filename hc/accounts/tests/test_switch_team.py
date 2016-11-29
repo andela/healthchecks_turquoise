@@ -1,34 +1,30 @@
-from django.http import HttpResponseForbidden
-from django.http import HttpResponseRedirect
-
 from hc.api.models import Check
 from hc.test import BaseTestCase
 
 
 class SwitchTeamTestCase(BaseTestCase):
     def test_it_switches(self):
-        c = Check(user=self.alice, name="This belongs to Alice")
-        c.save()
+        check = Check(user=self.alice, name="This belongs to Alice")
+        check.save()
 
         self.client.login(username="bob@example.org", password="password")
-
         url = "/accounts/switch_team/%s/" % self.alice.username
-        r = self.client.get(url, follow=True)
+        response = self.client.get(url, follow=True)
 
-        self.assertContains(r, 'This belongs to Alice')
+        self.assertContains(response, 'This belongs to Alice')
 
     def test_it_checks_team_membership(self):
         self.client.login(username="charlie@example.org", password="password")
 
         url = "/accounts/switch_team/%s/" % self.alice.username
-        r = self.client.get(url)
+        response = self.client.get(url)
 
-        self.assertEqual(r.status_code, 403)
+        self.assertEqual(403, response.status_code)
 
     def test_it_switches_to_own_team(self):
         self.client.login(username="alice@example.org", password="password")
 
         url = "/accounts/switch_team/%s/" % self.alice.username
-        r = self.client.get(url, follow=True)
-        ### Assert the expected error code
-        assert r.status_code == 200
+        response = self.client.get(url, follow=True)
+
+        self.assertEqual(200, response.status_code)
