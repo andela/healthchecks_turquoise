@@ -27,9 +27,9 @@ class SendAlertsTestCase(BaseTestCase):
         for args, kwargs in mock.call_args_list:
             handled_names.append(args[0].name)
 
-        assert set(names) == set(handled_names)
+        self.assertEqual(set(names),set(handled_names))
         ### The above assert fails. Make it pass
-        # TODO : Test passes!!
+        # WARNING: Test passes!!
 
     def test_it_handles_grace_period(self):
         check = Check(user=self.alice, status="up")
@@ -52,13 +52,13 @@ class SendAlertsTestCase(BaseTestCase):
 
         # create many checks
         print("Mockig handle one >>>> ", mock())
-        assert mock.called
+        self.assertTrue(mock.called)
         checks_names = ["Check {}".format(name) for name in range(100)]
         for name in checks_names:
             check = Check(user=self.alice, name=name)
             check.status = 'up'
             check.alert_after = last_alert_time
             check.save()
-        assert Command().handle_many(), 'handle_many should return true'
+        self.assertTrue(Command().handle_many(), msg = 'handle_many should return true')
 
 
