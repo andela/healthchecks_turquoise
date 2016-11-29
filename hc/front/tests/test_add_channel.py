@@ -54,4 +54,5 @@ class AddChannelTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(url, form)
-        assert r.status_code == 400, r.status_code
+        self.assertEqual(r.status_code, 400)
+
