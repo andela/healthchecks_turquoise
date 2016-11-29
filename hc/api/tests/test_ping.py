@@ -46,26 +46,26 @@ class PingTestCase(TestCase):
 
     def test_it_reads_forwarded_ip(self):
         ip = "1.1.1.1"
-        r = self.client.get("/ping/%s/" % self.check.code,
+        resp = self.client.get("/ping/%s/" % self.check.code,
                             HTTP_X_FORWARDED_FOR=ip)
         ping = Ping.objects.latest("id")
         ### Assert the expected response status code and ping's remote address
-        self.assertEqual(r.status_code, 200)
+        self.assertEqual(resp.status_code, 200)
         self.assertEqual(ping.remote_addr, "1.1.1.1")
 
         ip = "1.1.1.1, 2.2.2.2"
-        r = self.client.get("/ping/%s/" % self.check.code,
+        resp = self.client.get("/ping/%s/" % self.check.code,
                             HTTP_X_FORWARDED_FOR=ip, REMOTE_ADDR="3.3.3.3")
         ping = Ping.objects.latest("id")
-        assert r.status_code == 200
+        assert resp.status_code == 200
         assert ping.remote_addr == "1.1.1.1"
 
     def test_it_reads_forwarded_protocol(self):
-        r = self.client.get("/ping/%s/" % self.check.code,
+        resp = self.client.get("/ping/%s/" % self.check.code,
                             HTTP_X_FORWARDED_PROTO="https")
         ping = Ping.objects.latest("id")
         ### Assert the expected response status code and ping's scheme
-        self.assertEqual(r.status_code, 200)
+        self.assertEqual(resp.status_code, 200)
         self.assertEqual(ping.scheme, 'https')
 
 
