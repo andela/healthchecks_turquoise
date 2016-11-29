@@ -20,7 +20,7 @@ class EnsureTriggersTestCase(TestCase):
         check.refresh_from_db()
         assert check.alert_after is not None
         ### The above assert fails. Make it pass
-        # TODO : the assetion passes!!!
+        # WARNING: the assertion passes!!!
 
         alert_after = check.alert_after
 
