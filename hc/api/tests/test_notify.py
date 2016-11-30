@@ -231,6 +231,6 @@ class NotifyTestCase(BaseTestCase):
         self.channel.notify(self.check)
         n = Notification.objects.get()
         self.assertEqual(n.error,"Received status code 500")
-        
+
 
 
