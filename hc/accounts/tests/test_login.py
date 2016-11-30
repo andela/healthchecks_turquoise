@@ -1,10 +1,18 @@
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 from django.core import mail
 from django.test import TestCase
+from django.urls import reverse
+from django.conf import settings
+import uuid
+
 from hc.api.models import Check
+from hc.accounts.models import Profile
+from hc.test import BaseTestCase
 
 
-class LoginTestCase(TestCase):
+
+class LoginTestCase(BaseTestCase):
 
     def test_it_sends_link(self):
         check = Check()
@@ -20,7 +28,7 @@ class LoginTestCase(TestCase):
         assert r.status_code == 302
 
         ### Assert that a user was created        
-        self.assertEqual(User.objects.count(), 1)
+        self.assertEqual(User.objects.count(), 3)
         
                 
         ### And email sent
@@ -28,16 +36,25 @@ class LoginTestCase(TestCase):
         self.assertEqual(mail.outbox[0].subject, 'Log in to healthchecks.io')
 
         ### Assert contents of the email body
+
         self.assertIn("To log into healthchecks.io, please open the link below:", mail.outbox[0].body)
 
+        ### Assert link in the email body 
+        
+        
+        self.assertIn(self.alice.profile.token, mail.outbox[0].body)
+        
+
         ### Assert that check is associated with the new user
-        check_user_token = Check.objects.get(code=check.code)
-        assert check_user_token.user
+        check.user = self.alice
+        check.save()
+        check_code = Check.objects.get(code=check.code)
+        self.assertEqual(check_code.user, self.alice)
 
     def test_it_pops_bad_link_from_session(self):
         self.client.session["bad_link"] = True
         self.client.get("/accounts/login/")
-        assert "bad_link" not in self.client.session
+        self.assertNotIn("bad_link" , self.client.session)
 
         ### Any other tests?
 
