@@ -28,3 +28,5 @@ class SwitchTeamTestCase(BaseTestCase):
         response = self.client.get(url, follow=True)
 
         self.assertEqual(200, response.status_code)
+        self.assertRedirects(response, '/checks/')
+
