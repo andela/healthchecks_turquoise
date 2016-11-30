@@ -53,6 +53,6 @@ class AddChannelTestCase(BaseTestCase):
         form = {"kind": "Mouse", "value": "Jerry"}
 
         self.client.login(username="alice@example.org", password="password")
-        r = self.client.post(url, form)
-        self.assertEqual(r.status_code, 400)
+        response = self.client.post(url, form)
+        self.assertEqual(400, response.status_code)
 
