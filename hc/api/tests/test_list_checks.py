@@ -72,4 +72,8 @@ class ListChecksTestCase(BaseTestCase):
             self.assertNotEqual(check["name"], "Bob 1")
 
     ### Test that it accepts an api_key in the request
-
+    def test_it_accepts_api_key_from_request_body(self):
+        payload = json.dumps({"api_key":"abc"})
+        response = self.client.generic("GET", "/api/v1/checks/", payload, content_type="application/json")
+        self.assertEqual(response.status_code,200)
+        self.assertContains(response, "Alice")
