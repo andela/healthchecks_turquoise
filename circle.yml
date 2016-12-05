@@ -19,8 +19,16 @@ dependencies:
 deployment:
   staging:
     branch: develop
+<<<<<<< HEAD
     heroku:
       appname: healthchecks-turquoise-staging
+=======
+    commands:
+      - HEROKU_API_KEY=$HEROKU_API_KEY_STAGING heroku maintenance:on --app healthchecks-turquoise-staging
+      - git push git@heroku.com:healthchecks-turquoise-staging.git $CIRCLE_SHA1:refs/heads/master --force
+      - HEROKU_API_KEY=$HEROKU_API_KEY_STAGING heroku run python manage.py migrate --app healthchecks-turquoise-staging
+      - HEROKU_API_KEY=$HEROKU_API_KEY_STAGING heroku maintenance:off --app healthchecks-turquoise-staging
+>>>>>>> 218efbb49b128a9862949b0d1229401d10f2c1ef
 
   production:
     branch: master
