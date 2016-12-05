@@ -39,9 +39,6 @@ class CheckModelTestCase(TestCase):
     def test_new_check_is_not_in_grace_period(self):
         check = Check()
 
-        check.status = "up"
+        check.status = "new"
         check.last_ping = timezone.now() - timedelta(days=1, minutes=30)
-        self.assertTrue(check.in_grace_period())
-
-        check.status = "paused"
         self.assertFalse(check.in_grace_period())
