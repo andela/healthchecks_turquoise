@@ -87,14 +87,20 @@ class CreateCheckTestCase(BaseTestCase):
 
     ### Test for the assignment of channels
     def test_check_has_channel_assigned(self):
-        existing = Check(user=self.alice, name="Foo")
-        existing.save()
+        alice_channel = Channel(user=self.alice, kind="email")
+        alice_channel.email = "alice@example.org"
+        alice_channel.save()
 
-        self.post({
-            "api_key": "abc",
-            "name": "Foo",
-            "unique": ["status"]
-        })
+        alice_check = Check(user=self.alice, name="Foo")
+        alice_check.save()
+
+        payload = {
+            "channel": alice_channel.code,
+            "check-%s" % alice_check.code: True
+        }
+        self.client.login(username="alice@example.org", password="password")
+        r = self.client.post("/integrations/", data=payload)
+        assert r.status_code == 302
 
     ### Test for the 'timeout is too small' and 'timeout is too large' errors
     def test_irregular_timeouts(self):
