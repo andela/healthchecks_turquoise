@@ -22,7 +22,7 @@ STATUSES = (
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
 CHANNEL_KINDS = (("email", "Email"), ("webhook", "Webhook"),
-                 ("hipchat", "HipChat"),
+                 ("hipchat", "HipChat"),("pushbullet", "Pushbullet"),
                  ("slack", "Slack"), ("pd", "PagerDuty"), ("po", "Pushover"),
                  ("victorops", "VictorOps"))
 
