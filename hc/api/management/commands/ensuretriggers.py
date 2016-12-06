@@ -19,6 +19,34 @@ def _pg(cursor):
     CREATE TRIGGER update_alert_after
     BEFORE INSERT OR UPDATE OF last_ping, timeout, grace  ON api_check
     FOR EACH ROW EXECUTE PROCEDURE update_alert_after();
+
+    -- Function to determine if the Check is running too often
+    CREATE OR REPLACE FUNCTION update_running_too_often()
+    RETURNS trigger AS $update_running_too_often$
+        BEGIN
+            -- check must have been up to be running too often
+            IF (NEW.last_ping IS NOT NULL) AND (OLD.status = 'up') THEN
+                IF NEW.last_ping < OLD.alert_after - NEW.grace - NEW.grace THEN
+                    NEW.running_too_often := TRUE;
+                ELSE
+                    NEW.running_too_often := FALSE;
+                END IF;
+            END IF;
+
+            IF NEW.status = 'down' OR NEW.status = 'new' THEN
+                NEW.running_too_often :=  FALSE;
+            END IF;
+
+            RETURN NEW;
+        END;
+    $update_running_too_often$ LANGUAGE plpgsql;
+
+    -- Trigger to update the field running_too_often
+    DROP TRIGGER IF EXISTS update_running_too_often ON api_check;
+
+    CREATE TRIGGER update_running_too_often
+    BEFORE INSERT OR UPDATE OF last_ping, timeout, grace, reverse_grace, status ON api_check
+    FOR EACH ROW EXECUTE PROCEDURE update_running_too_often();
     """)
 
 
