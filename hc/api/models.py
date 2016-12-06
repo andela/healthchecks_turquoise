@@ -99,6 +99,9 @@ class Check(models.Model):
         grace_ends = up_ends + self.grace
         return up_ends < timezone.now() < grace_ends
 
+    def in_nag_state(self):
+        pass
+
     def assign_all_channels(self):
         if self.user:
             channels = Channel.objects.filter(user=self.user)

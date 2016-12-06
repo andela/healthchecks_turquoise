@@ -14,6 +14,7 @@ class EnsureTriggersTestCase(TestCase):
 
         check = Check.objects.create()
         assert check.alert_after is None
+        assert check.nag_after is None
 
         check.last_ping = timezone.now()
         check.save()
@@ -26,4 +27,11 @@ class EnsureTriggersTestCase(TestCase):
         check.last_ping += timedelta(days=1)
         check.save()
         check.refresh_from_db()
-        ### Assert that alert_after is lesser than the check's alert_after 
+        ### Assert that alert_after is lesser than the check's alert_after
+
+        check.status = "down"
+        check.last_ping -= timedelta(days=1)
+        check.save()
+        check.refresh_from_db()
+
+        self.assertIsNotNone(check.nag_after)
