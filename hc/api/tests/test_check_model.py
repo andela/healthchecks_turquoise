@@ -41,7 +41,7 @@ class CheckModelTestCase(TestCase):
         check = Check()
 
         check.status = "down"
-        check.last_ping = timezone.now() - timedelta(days=1, minutes=30)
+        check.last_nag = timezone.now() - timedelta(days=1, minutes=30)
 
         check.status = "nag"
 

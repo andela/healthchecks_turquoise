@@ -21,6 +21,7 @@ STATUSES = (
 )
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
+DEFAULT_NAG_TIMEOUT = td(hours=12)
 CHANNEL_KINDS = (("email", "Email"), ("webhook", "Webhook"),
                  ("hipchat", "HipChat"),
                  ("slack", "Slack"), ("pd", "PagerDuty"), ("po", "Pushover"),
@@ -47,10 +48,14 @@ class Check(models.Model):
     user = models.ForeignKey(User, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     timeout = models.DurationField(default=DEFAULT_TIMEOUT)
+    nag_timeout = models.DurationField(default=DEFAULT_NAG_TIMEOUT)
     grace = models.DurationField(default=DEFAULT_GRACE)
     n_pings = models.IntegerField(default=0)
+    n_nags = models.IntegerField(default=0)
     last_ping = models.DateTimeField(null=True, blank=True)
+    last_nag = models.DateTimeField(null=True, blank=True)
     alert_after = models.DateTimeField(null=True, blank=True, editable=False)
+    nag_after = models.DateTimeField(null=True, blank=True, editable=False)
     status = models.CharField(max_length=6, choices=STATUSES, default="new")
 
     def name_then_code(self):
@@ -100,7 +105,12 @@ class Check(models.Model):
         return up_ends < timezone.now() < grace_ends
 
     def in_nag_state(self):
-        pass
+        if self.status in ("new", "paused", "up"):
+            return False
+
+        nags_start = self.last_nag + self.nag_timeout
+
+        return nags_start < timezone.now()
 
     def assign_all_channels(self):
         if self.user:
@@ -119,8 +129,10 @@ class Check(models.Model):
             "pause_url": settings.SITE_ROOT + pause_rel_url,
             "tags": self.tags,
             "timeout": int(self.timeout.total_seconds()),
+            "nag_timeout": int(self.nag_timeout.total_seconds()),
             "grace": int(self.grace.total_seconds()),
             "n_pings": self.n_pings,
+            "n_nags": self.n_nags,
             "status": self.get_status()
         }
 
@@ -131,6 +143,12 @@ class Check(models.Model):
             result["last_ping"] = None
             result["next_ping"] = None
 
+        if self.last_nag:
+            result["last_nag"] = self.last_nag.isoformat()
+            result["next_nag"] = (self.last_nag + self.nag_timeout).isoformat()
+        else:
+            result["last_nag"] = None
+            result["next_nag"] = None
         return result
 
 
