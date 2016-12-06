@@ -29,7 +29,5 @@ class PauseTestCase(BaseTestCase):
         self.assertEqual(resp.status_code, 400)
 
         ### Test that it only allows post requests
-        # Reference -->>> https://docs.djangoproject.com/en/dev/topics/testing/advanced/
-        req_factory = RequestFactory()
-        req = req_factory.post(url, "", content_type="application/json", HTTP_X_API_KEY="abc")
-        self.assertEqual(req.method, 'POST')
+        resp = self.client.get(url, "", content_type="application/json", HTTP_X_API_KEY="abc")
+        self.assertEqual(resp.status_code, 405)
