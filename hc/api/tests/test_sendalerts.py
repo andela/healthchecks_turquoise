@@ -29,11 +29,7 @@ class SendAlertsTestCase(BaseTestCase):
 
         self.assertEqual(set(names),set(handled_names))
         ### The above assert fails. Make it pass
-<<<<<<< HEAD
-        # TODO : Test passes!!
-=======
         # WARNING: Test passes!!
->>>>>>> origin/ft-api-tests-133846503
 
     def test_it_handles_grace_period(self):
         check = Check(user=self.alice, status="up")
@@ -56,21 +52,11 @@ class SendAlertsTestCase(BaseTestCase):
 
         # create many checks
         print("Mockig handle one >>>> ", mock())
-<<<<<<< HEAD
-        assert mock.called
-=======
         self.assertTrue(mock.called)
->>>>>>> origin/ft-api-tests-133846503
         checks_names = ["Check {}".format(name) for name in range(100)]
         for name in checks_names:
             check = Check(user=self.alice, name=name)
             check.status = 'up'
             check.alert_after = last_alert_time
             check.save()
-<<<<<<< HEAD
-        assert Command().handle_many(), 'handle_many should return true'
-=======
         self.assertTrue(Command().handle_many(), msg = 'handle_many should return true')
->>>>>>> origin/ft-api-tests-133846503
-
-

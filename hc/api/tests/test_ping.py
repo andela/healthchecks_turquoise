@@ -50,13 +50,8 @@ class PingTestCase(TestCase):
                             HTTP_X_FORWARDED_FOR=ip)
         ping = Ping.objects.latest("id")
         ### Assert the expected response status code and ping's remote address
-<<<<<<< HEAD
-        assert r.status_code == 200
-        assert ping.remote_addr == "1.1.1.1"
-=======
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(ping.remote_addr, "1.1.1.1")
->>>>>>> origin/ft-api-tests-133846503
 
         ip = "1.1.1.1, 2.2.2.2"
         resp = self.client.get("/ping/%s/" % self.check.code,
@@ -70,13 +65,8 @@ class PingTestCase(TestCase):
                             HTTP_X_FORWARDED_PROTO="https")
         ping = Ping.objects.latest("id")
         ### Assert the expected response status code and ping's scheme
-<<<<<<< HEAD
-        assert r.status_code == 200
-        assert ping.scheme == 'https'
-=======
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(ping.scheme, 'https')
->>>>>>> origin/ft-api-tests-133846503
 
 
     def test_it_never_caches(self):
@@ -109,4 +99,3 @@ class PingTestCase(TestCase):
         csrf_client = Client(enforce_csrf_checks=True)
         res = csrf_client.get("/ping/{}/".format(self.check.code))
         self.assertEqual(res.status_code, 200)
-
