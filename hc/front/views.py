@@ -12,11 +12,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
-from django.utils.six.moves.urllib.parse import urlencode
+from django.utils.http import urlencode
+
 from hc.api.decorators import uuid_or_400
 from hc.api.models import DEFAULT_GRACE, DEFAULT_TIMEOUT, Channel, Check, Ping
 from hc.front.forms import (AddChannelForm, AddWebhookForm, NameTagsForm,
-                            TimeoutForm)
+                            TimeoutForm, NagForm)
 
 
 # from itertools recipes:
@@ -164,6 +165,24 @@ def update_timeout(request, code):
     if form.is_valid():
         check.timeout = td(seconds=form.cleaned_data["timeout"])
         check.grace = td(seconds=form.cleaned_data["grace"])
+        check.save()
+
+    return redirect("hc-checks")
+
+
+@login_required
+@uuid_or_400
+def nag(request, code):
+    assert request.method == "POST"
+
+    check = get_object_or_404(Check, code=code)
+    if check.user != request.team.user:
+        return HttpResponseForbidden()
+
+    form = NagForm(request.POST)
+    if form.is_valid():
+        check.nag_timeout = td(seconds=form.cleaned_data["nag_timeout"])
+        check.nag_enabled = form.cleaned_data["nag_enabled"]
         check.save()
 
     return redirect("hc-checks")

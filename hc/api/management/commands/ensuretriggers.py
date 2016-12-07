@@ -5,7 +5,7 @@ from django.db import connection
 def _pg(cursor):
     cursor.execute("""
     CREATE OR REPLACE FUNCTION update_alert_after()
-    RETURNS trigger AS $update_alert_after$
+    RETURNS TRIGGER AS $update_alert_after$
         BEGIN
             IF NEW.last_ping IS NOT NULL THEN
                 NEW.alert_after := NEW.last_ping + NEW.timeout + NEW.grace;
@@ -19,6 +19,23 @@ def _pg(cursor):
     CREATE TRIGGER update_alert_after
     BEFORE INSERT OR UPDATE OF last_ping, timeout, grace  ON api_check
     FOR EACH ROW EXECUTE PROCEDURE update_alert_after();
+
+    CREATE OR REPLACE FUNCTION update_nag_after()
+    RETURNS TRIGGER AS $update_nag_after$
+        BEGIN
+            IF NEW.last_nag IS NOT NULL THEN
+                NEW.nag_after := NEW.last_nag + NEW.nag_timeout;
+            END IF;
+            RETURN NEW;
+        END;
+    $update_nag_after$ LANGUAGE plpgsql;
+
+    DROP TRIGGER IF EXISTS update_nag_after ON api_check;
+
+    CREATE TRIGGER update_nag_after
+    BEFORE INSERT OR UPDATE OF last_ping, last_nag, nag_timeout, nag_enabled
+      ON api_check
+    FOR EACH ROW EXECUTE PROCEDURE update_nag_after();
     """)
 
 

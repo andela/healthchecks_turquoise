@@ -30,8 +30,11 @@ class EnsureTriggersTestCase(TestCase):
         ### Assert that alert_after is lesser than the check's alert_after
 
         check.status = "down"
-        check.last_ping -= timedelta(days=1)
+        check.last_nag = timezone.now()
         check.save()
+
         check.refresh_from_db()
+
+        print(check.last_nag.isoformat())
 
         self.assertIsNotNone(check.nag_after)

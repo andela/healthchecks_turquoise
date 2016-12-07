@@ -48,15 +48,16 @@ class Check(models.Model):
     user = models.ForeignKey(User, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     timeout = models.DurationField(default=DEFAULT_TIMEOUT)
-    nag_timeout = models.DurationField(default=DEFAULT_NAG_TIMEOUT)
     grace = models.DurationField(default=DEFAULT_GRACE)
     n_pings = models.IntegerField(default=0)
-    n_nags = models.IntegerField(default=0)
     last_ping = models.DateTimeField(null=True, blank=True)
-    last_nag = models.DateTimeField(null=True, blank=True)
     alert_after = models.DateTimeField(null=True, blank=True, editable=False)
-    nag_after = models.DateTimeField(null=True, blank=True, editable=False)
     status = models.CharField(max_length=6, choices=STATUSES, default="new")
+    nag_timeout = models.DurationField(default=DEFAULT_NAG_TIMEOUT)
+    nag_after = models.DateTimeField(null=True, blank=True, editable=False)
+    last_nag = models.DateTimeField(null=True, blank=True)
+    n_nags = models.IntegerField(default=0)
+    nag_enabled = models.BooleanField(default=True)
 
     def name_then_code(self):
         if self.name:
@@ -90,6 +91,10 @@ class Check(models.Model):
             return self.status
 
         now = timezone.now()
+
+        if self.status == "down":
+            if self.last_ping + self.nag_timeout > now:
+                return "nag"
 
         if self.last_ping + self.timeout + self.grace > now:
             return "up"

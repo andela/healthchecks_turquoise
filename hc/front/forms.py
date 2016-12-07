@@ -22,6 +22,11 @@ class TimeoutForm(forms.Form):
     grace = forms.IntegerField(min_value=60, max_value=2592000)
 
 
+class NagForm(forms.Form):
+    nag_timeout = forms.IntegerField(min_value=60, max_value=2592000)
+    nag_enabled = forms.BooleanField(required=False)
+
+
 class AddChannelForm(forms.ModelForm):
 
     class Meta:
