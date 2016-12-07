@@ -20,9 +20,5 @@ class ApiAdminTestCase(BaseTestCase):
         ch.save()
 
         ### Assert for the push bullet
-<<<<<<< HEAD
         r = self.client.get("/admin/api/channel/", follow=True)
-=======
-        r = self.client.get("/admin/api/channel/")
->>>>>>> origin/ft-api-tests-133846503
         # self.assertContains(r, "Pushbullet")
