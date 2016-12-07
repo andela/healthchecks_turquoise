@@ -35,10 +35,4 @@ deployment:
     commands:
       - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:on --app healthchecks-turquoise
       - git push git@heroku.com:healthchecks-turquoise.git $CIRCLE_SHA1:refs/heads/master --force
-<<<<<<< HEAD
       - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:off --app healthchecks-turquoise
-=======
-      - HEROKU_API_KEY=$HEROKU_API_KEY_PROD heroku maintenance:off --app healthchecks-turquoise
-
-
->>>>>>> origin/ft-api-tests-133846503
