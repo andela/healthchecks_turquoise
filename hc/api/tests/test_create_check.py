@@ -87,6 +87,7 @@ class CreateCheckTestCase(BaseTestCase):
 
     ### Test for the assignment of channels
     def test_check_has_channel_assigned(self):
+<<<<<<< HEAD
         channel = Channel(user=self.alice)
         channel.save()
 
@@ -99,6 +100,16 @@ class CreateCheckTestCase(BaseTestCase):
         r = self.post(payload)
         assert r.status_code == 201
         self.assertEqual(channel.user, Check.objects.get().user)
+=======
+        existing = Check(user=self.alice, name="Foo")
+        existing.save()
+
+        self.post({
+            "api_key": "abc",
+            "name": "Foo",
+            "unique": ["status"]
+        })
+>>>>>>> origin/ft-api-tests-133846503
 
     ### Test for the 'timeout is too small' and 'timeout is too large' errors
     def test_irregular_timeouts(self):

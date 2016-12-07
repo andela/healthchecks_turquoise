@@ -10,28 +10,39 @@ class PauseTestCase(BaseTestCase):
         check.save()
 
         url = "/api/v1/checks/%s/pause" % check.code
-        r = self.client.post(url, "", content_type="application/json",
+        resp = self.client.post(url, "", content_type="application/json",
                              HTTP_X_API_KEY="abc")
 
         ### Assert the expected status code and check's status
+<<<<<<< HEAD
         # >> DONE
         check.refresh_from_db()
         assert r.status_code == 200
         assert check.status == 'paused'
+=======
+        check.refresh_from_db()
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(check.status, 'paused')
+>>>>>>> origin/ft-api-tests-133846503
 
     def test_it_validates_ownership(self):
         check = Check(user=self.bob, status="up")
         check.save()
 
         url = "/api/v1/checks/%s/pause" % check.code
-        r = self.client.post(url, "", content_type="application/json",
+        resp = self.client.post(url, "", content_type="application/json",
                              HTTP_X_API_KEY="abc")
 
-        self.assertEqual(r.status_code, 400)
+        self.assertEqual(resp.status_code, 400)
 
         ### Test that it only allows post requests
+<<<<<<< HEAD
         # >> DONE
         # https://docs.djangoproject.com/en/dev/topics/testing/advanced/
         req_factory = RequestFactory()
         req = req_factory.post(url, "", content_type="application/json", HTTP_X_API_KEY="abc")
         self.assertEqual(req.method, 'POST')
+=======
+        resp = self.client.get(url, "", content_type="application/json", HTTP_X_API_KEY="abc")
+        self.assertEqual(resp.status_code, 405)
+>>>>>>> origin/ft-api-tests-133846503

@@ -20,7 +20,11 @@ class EnsureTriggersTestCase(TestCase):
         check.refresh_from_db()
         assert check.alert_after is not None
         ### The above assert fails. Make it pass
+<<<<<<< HEAD
         # TODO : the assetion passes!!!
+=======
+        # WARNING: the assertion passes!!!
+>>>>>>> origin/ft-api-tests-133846503
 
         alert_after = check.alert_after
 
