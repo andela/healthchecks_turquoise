@@ -40,9 +40,7 @@ class CheckModelTestCase(TestCase):
     def test_it_creates_check_in_nag_state(self):
         check = Check()
 
-        check.status = "down"
-        check.last_nag = timezone.now() - timedelta(days=1, minutes=30)
-
         check.status = "nag"
+        check.last_nag = timezone.now() - timedelta(days=1, minutes=30)
 
         self.assertTrue(check.in_nag_state())

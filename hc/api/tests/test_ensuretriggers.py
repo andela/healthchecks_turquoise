@@ -34,7 +34,4 @@ class EnsureTriggersTestCase(TestCase):
         check.save()
 
         check.refresh_from_db()
-
-        print(check.last_nag.isoformat())
-
-        self.assertIsNotNone(check.nag_after)
+        self.assertGreater(check.nag_after, timezone.now())
