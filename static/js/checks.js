@@ -87,6 +87,28 @@ $(function () {
         $("#update-timeout-grace").val(rounded);
     });
 
+    var nagSlider = document.getElementById("nag_period-slider");
+    noUiSlider.create(nagSlider, {
+        start: [20],
+        connect: "lower",
+        range: {
+            'min': [60, 60],
+            '33%': [3600, 3600],
+            '66%': [86400, 86400],
+            '83%': [604800, 604800],
+            'max': 2592000,
+        },
+        pips: {
+            mode: 'values',
+            values: [60, 1800, 3600, 43200, 86400, 604800, 2592000],
+            density: 4,
+            format: {
+                to: secsToText,
+                from: function() {}
+            }
+        }
+    });
+
 
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -109,6 +131,16 @@ $(function () {
         periodSlider.noUiSlider.set($this.data("timeout"))
         graceSlider.noUiSlider.set($this.data("grace"))
         $('#update-timeout-modal').modal({"show":true, "backdrop":"static"});
+
+        return false;
+    });
+
+    $(".timeout-nag").click(function() {
+        var $this = $(this);
+
+        $("#nag-timeout-form").attr("action", $this.data("url"));
+        nagSlider.noUiSlider.set($this.data("nag_timeout"))
+        $('#nag-timeout-modal').modal({"show":true, "backdrop":"static"});
 
         return false;
     });

@@ -95,8 +95,11 @@ class Check(models.Model):
         if self.last_ping + self.timeout + self.grace > now:
             return "up"
 
-        if ((self.status == "down") and (self.last_ping + self.timeout + self.nag_timeout + self.grace) < now) \
-                or self.status == "nag":
+        if (self.status == "down") and (self.last_ping + self.timeout + self.nag_timeout + self.grace) < now:
+            self.last_nag = now
+            return "nag"
+
+        if self.status == "nag":
             return "nag"
 
         return "down"

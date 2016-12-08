@@ -2,6 +2,10 @@
     padding-top: 40px;
 }
 
+#update-nag-timeout-modal .modal-body {
+    padding-top: 40px;
+}
+
 .update-timeout-info {
     line-height: 22px;
 }
@@ -23,7 +27,7 @@
 
 }
 
-#period-slider {
+#period-slider, #nag-slider {
     margin: 20px 50px 80px 50px;
 }
 
@@ -39,7 +43,8 @@
   background: #f0ad4e;
 }
 
-#period-slider .noUi-value, #grace-slider .noUi-value {
+#period-slider .noUi-value, #grace-slider .noUi-value,
+#nag-slider .noUi-value {
     width: 60px;
     margin-left: -30px;
 }
