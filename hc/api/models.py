@@ -87,17 +87,17 @@ class Check(models.Model):
         return errors
 
     def get_status(self):
-        if self.status in ("new", "paused", "nag"):
+        if self.status in ("new", "paused"):
             return self.status
 
         now = timezone.now()
 
-        if self.status == "down":
-            if self.last_ping + self.nag_timeout > now:
-                return "nag"
-
         if self.last_ping + self.timeout + self.grace > now:
             return "up"
+
+        if ((self.status == "down") and (self.last_ping + self.timeout + self.nag_timeout + self.grace) < now) \
+                or self.status == "nag":
+            return "nag"
 
         return "down"
 

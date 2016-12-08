@@ -30,6 +30,7 @@ class SendAlertsTestCase(BaseTestCase):
         assert set(names) == set(handled_names)
         ### The above assert fails. Make it pass
 
+
     def test_it_handles_grace_period(self):
         check = Check(user=self.alice, status="up")
         # 1 day 30 minutes after ping the check is in grace period:
@@ -40,3 +41,10 @@ class SendAlertsTestCase(BaseTestCase):
         Command().handle_one(check)
 
     ### Assert when Command's handle many that when handle_many should return True
+
+    def test_it_handles_check_in_nag_state(self):
+        check = Check(user=self.alice, status="down")
+        check.last_ping = timezone.now() - timedelta(days=1, hours=13)
+        check.save()
+
+        self.assertEqual("nag", check.get_status())
