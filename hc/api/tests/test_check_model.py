@@ -36,11 +36,3 @@ class CheckModelTestCase(TestCase):
         self.assertFalse(check.in_grace_period())
 
     ### Test that when a new check is created, it is not in the grace period
-
-    def test_it_creates_check_in_nag_state(self):
-        check = Check()
-
-        check.status = "nag"
-        check.last_nag = timezone.now() - timedelta(days=1, minutes=30)
-
-        self.assertTrue(check.in_nag_state())

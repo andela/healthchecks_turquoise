@@ -56,13 +56,11 @@ class SendAlertsTestCase(BaseTestCase):
         check.timeout = td(minutes=5)
         check.grace = td(minutes=2)
         check.nag_timeout = td(minutes=1)
+        check.last_ping = timezone.now() - td(minutes=20)
         check.save()
 
         check.refresh_from_db()
-        check.last_ping = timezone.now() - td(minutes=7, seconds=60)
-        check.save()
 
-        check.refresh_from_db()
+        self.assertEqual("nag", check.get_status())
 
-        print(check.last_nag.isoformat())
 

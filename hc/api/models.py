@@ -96,6 +96,8 @@ class Check(models.Model):
             return "up"
 
         if (self.last_ping + self.timeout + self.grace + self.nag_timeout) < now:
+            if self.last_nag is None:
+                self.last_nag = self.last_ping + self.timeout + self.grace + self.nag_timeout
             return "nag"
 
         return "down"
@@ -107,14 +109,6 @@ class Check(models.Model):
         up_ends = self.last_ping + self.timeout
         grace_ends = up_ends + self.grace
         return up_ends < timezone.now() < grace_ends
-
-    def in_nag_state(self):
-        if self.status in ("new", "paused", "up", "down"):
-            return False
-
-        nags_start = self.last_nag + self.nag_timeout
-
-        return nags_start < timezone.now()
 
     def assign_all_channels(self):
         if self.user:
