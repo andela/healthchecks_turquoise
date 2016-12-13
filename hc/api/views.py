@@ -109,6 +109,9 @@ def badge(request, username, signature, tag):
 
         if check.get_status() == "down":
             status = "down"
+
+        if check.get_status() == "nag":
+            status = "nag"
             break
 
     svg = get_badge_svg(tag, status)
