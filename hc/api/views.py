@@ -26,6 +26,13 @@ def ping(request, code):
     if check.status in ("new", "paused"):
         check.status = "up"
 
+    if check.alert_after and check.last_ping < (check.alert_after - check.grace - check.grace):
+        check.status = "running_too_often"
+        check.send_rto_alert = True
+    else:
+        if check.status == "running_too_often":
+            check.status = "up"
+
     check.save()
     check.refresh_from_db()
 
