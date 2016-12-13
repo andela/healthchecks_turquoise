@@ -10,7 +10,7 @@ class ApiAdminTestCase(BaseTestCase):
 
         ### Set Alice to be staff and superuser and save her :)
         self.alice.is_staff = True
-        self.alice.superuser = True
+        self.alice.is_superuser = True
         self.alice.save()
 
     def test_it_shows_channel_list_with_pushbullet(self):
@@ -21,4 +21,4 @@ class ApiAdminTestCase(BaseTestCase):
 
         ### Assert for the push bullet
         r = self.client.get("/admin/api/channel/")
-        # self.assertContains(r, "Pushbullet")
+        self.assertContains(r, "Pushbullet")
