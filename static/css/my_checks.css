@@ -27,11 +27,11 @@
 
 }
 
-#period-slider, #nag-slider {
+#period-slider, #nag_period-slider {
     margin: 20px 50px 80px 50px;
 }
 
-#period-slider.noUi-connect {
+#period-slider.noUi-connect, #nag_period-slider.noUi-connect  {
   background: #22bc66;
 }
 
@@ -44,7 +44,7 @@
 }
 
 #period-slider .noUi-value, #grace-slider .noUi-value,
-#nag-slider .noUi-value {
+#nag_period-slider .noUi-value {
     width: 60px;
     margin-left: -30px;
 }

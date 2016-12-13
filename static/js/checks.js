@@ -109,6 +109,12 @@ $(function () {
         }
     });
 
+    nagSlider.noUiSlider.on("update", function(a, b, value) {
+        var rounded = Math.round(value);
+        $("#nag-slider-value").text(secsToText(rounded));
+        $("#nag-timeout").val(rounded);
+    });
+
 
     $('[data-toggle="tooltip"]').tooltip();
 

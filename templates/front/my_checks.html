@@ -169,12 +169,11 @@
         </form>
     </div>
 </div>
-
     <div id="nag-timeout-modal" class="modal">
     <div class="modal-dialog">
         <form id="nag-timeout-form" method="post">
             {% csrf_token %}
-            <input type="hidden" name="nag_timeout" id="nag-timeout-timeout" />
+            <input type="hidden" name="nag_timeout" id="nag-timeout" />
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="update-timeout-info text-center">
@@ -185,8 +184,8 @@
                             Period
                         </span>
                         <span
-                            id="period-slider-value"
-                            class="update-timeout-value">
+                            id="nag-slider-value"
+                            class="update-nag-timeout">
                             1 day
                         </span>
                     </div>
@@ -195,11 +194,11 @@
                     <div class="update-timeout-terms">
                         <p>
                             <span>Period</span>
-                            Expected time between pings.
+                            Expected time between nags.
                         </p>
                         <p>
-                            <span>Grace Time</span>
-                            When a check is late, how much time to wait until alert is sent.
+                            <span>Nag Time</span>
+                            When a check is down, how much time to wait until nag alert is sent.
                         </p>
                     </div>
 
