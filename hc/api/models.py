@@ -17,7 +17,8 @@ STATUSES = (
     ("up", "Up"),
     ("down", "Down"),
     ("new", "New"),
-    ("paused", "Paused")
+    ("paused", "Paused"),
+    ("running_too_often", "Running too Often"),
 )
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
@@ -52,9 +53,8 @@ class Check(models.Model):
     n_pings = models.IntegerField(default=0)
     last_ping = models.DateTimeField(null=True, blank=True)
     alert_after = models.DateTimeField(null=True, blank=True, editable=False)
-    status = models.CharField(max_length=6, choices=STATUSES, default="new")
-    running_too_often = models.BooleanField(default=False)
-    reverse_grace = models.DurationField(default=DEFAULT_REVERSE_GRACE)
+    status = models.CharField(max_length=25, choices=STATUSES, default="new")
+    send_rto_alert = models.BooleanField(default=False)
 
     def name_then_code(self):
         if self.name:
@@ -72,7 +72,7 @@ class Check(models.Model):
         return "%s@%s" % (self.code, settings.PING_EMAIL_DOMAIN)
 
     def send_alert(self):
-        if self.status not in ("up", "down"):
+        if self.status not in ("up", "down", "running_too_often"):
             raise NotImplementedError("Unexpected status: %s" % self.status)
 
         errors = []
@@ -84,15 +84,15 @@ class Check(models.Model):
         return errors
 
     def get_status(self):
-        if self.status in ("new", "paused"):
+        if self.status in ("new", "paused", "running_too_often"):
             return self.status
 
         now = timezone.now()
 
         if self.last_ping + self.timeout + self.grace > now:
             return "up"
-
-        return "down"
+        else:
+            return "down"
 
     def in_grace_period(self):
         if self.status in ("new", "paused"):
@@ -262,7 +262,7 @@ class Notification(models.Model):
         get_latest_by = "created"
 
     owner = models.ForeignKey(Check)
-    check_status = models.CharField(max_length=6)
+    check_status = models.CharField(max_length=25)
     channel = models.ForeignKey(Channel)
     created = models.DateTimeField(auto_now_add=True)
     error = models.CharField(max_length=200, blank=True)
