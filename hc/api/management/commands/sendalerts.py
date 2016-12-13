@@ -21,14 +21,18 @@ class Command(BaseCommand):
         now = timezone.now()
         going_down = query.filter(alert_after__lt=now, status="up")
         going_up = query.filter(alert_after__gt=now, status="down")
+
+        running_too_often = query.filter(send_rto_alert=True, status="running_too_often")
         # Don't combine this in one query so Postgres can query using index:
-        checks = list(going_down.iterator()) + list(going_up.iterator())
+        checks = list(going_down.iterator()) + \
+            list(going_up.iterator()) + list(running_too_often.iterator())
         if not checks:
             return False
 
         futures = [executor.submit(self.handle_one, check) for check in checks]
         for future in futures:
             future.result()
+        # self.stdout.write("{}".format(checks))
 
         return True
 
@@ -42,12 +46,16 @@ class Command(BaseCommand):
 
         # Save the new status. If sendalerts crashes,
         # it won't process this check again.
+        check.refresh_from_db()
         check.status = check.get_status()
         check.save()
 
-        tmpl = "\nSending alert, status=%s, code=%s\n"
-        self.stdout.write(tmpl % (check.status, check.code))
+        tmpl = "\nSending alert, status=%s, code=%s send_rto_alert=%s\n"
+        self.stdout.write(tmpl % (check.status, check.code, check.send_rto_alert))
         errors = check.send_alert()
+        if check.get_status() == "running_too_often":
+            check.send_rto_alert = False
+            check.save()
         for ch, error in errors:
             self.stdout.write("ERROR: %s %s %s\n" % (ch.kind, ch.value, error))
 
