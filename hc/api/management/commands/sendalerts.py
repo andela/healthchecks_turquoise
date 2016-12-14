@@ -21,11 +21,12 @@ class Command(BaseCommand):
         now = timezone.now()
         going_down = query.filter(alert_after__lt=now, status="up")
         going_up = query.filter(alert_after__gt=now, status="down")
+        going_down_frm_rto = query.filter(alert_after__lt=now, status="running_too_often")
 
         running_too_often = query.filter(send_rto_alert=True, status="running_too_often")
         # Don't combine this in one query so Postgres can query using index:
         checks = list(going_down.iterator()) + \
-            list(going_up.iterator()) + list(running_too_often.iterator())
+            list(going_up.iterator()) + list(running_too_often.iterator()) + list(going_down_frm_rto.iterator())
         if not checks:
             return False
 
