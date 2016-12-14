@@ -61,6 +61,7 @@ class ListChecksTestCase(BaseTestCase):
         self.assertEqual(checks["Alice 2"]["ping_url"], self.a2.url())
         self.assertEqual(checks["Alice 2"]["status"], "up")
 
+    
     def test_it_shows_only_users_checks(self):
         bobs_check = Check(user=self.bob, name="Bob 1")
         bobs_check.save()
