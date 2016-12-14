@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = 'Sends UP/DOWN email alerts'
+    help = 'Sends UP/DOWN/RUNNING_TOO_OFTEN email alerts'
 
     def handle_many(self):
         """ Send alerts for many checks simultaneously. """
@@ -26,7 +26,8 @@ class Command(BaseCommand):
         running_too_often = query.filter(send_rto_alert=True, status="running_too_often")
         # Don't combine this in one query so Postgres can query using index:
         checks = list(going_down.iterator()) + \
-            list(going_up.iterator()) + list(running_too_often.iterator()) + list(going_down_frm_rto.iterator())
+                 list(going_up.iterator()) + list(running_too_often.iterator()) + list(going_down_frm_rto.iterator())
+
         if not checks:
             return False
 
@@ -53,6 +54,7 @@ class Command(BaseCommand):
 
         tmpl = "\nSending alert, status=%s, code=%s send_rto_alert=%s\n"
         self.stdout.write(tmpl % (check.status, check.code, check.send_rto_alert))
+
         errors = check.send_alert()
         if check.get_status() == "running_too_often":
             check.send_rto_alert = False
