@@ -38,7 +38,6 @@ PO_PRIORITIES = {
 
 
 class Check(models.Model):
-
     class Meta:
         # sendalerts command will query using these
         index_together = ["status", "user", "alert_after"]
@@ -84,13 +83,16 @@ class Check(models.Model):
         return errors
 
     def get_status(self):
-        if self.status in ("new", "paused", "running_too_often"):
-            return self.status
-
         now = timezone.now()
 
+        if self.status in ("new", "paused",):
+            return self.status
+
         if self.last_ping + self.timeout + self.grace > now:
-            return "up"
+            if self.status == "running_too_often":
+                return self.status
+            else:
+                return "up"
         else:
             return "down"
 
