@@ -1,4 +1,5 @@
 from datetime import timedelta
+import time
 
 from django.test import TestCase
 from django.utils import timezone

@@ -37,14 +37,3 @@ class CheckModelTestCase(TestCase):
 
     # Test that when a new check is created, it is not in the grace period
 
-    # Additional test for 'running too often' feature
-    def test_new_check_does_not_run_too_often(self):
-        """
-        A Check with status 'new' should have the field `running_too_often` set
-        to false
-        """
-        check = Check()
-        check.save()
-
-        self.assertEqual(check.status, 'new')
-        self.assertEqual(check.running_too_often, False)
