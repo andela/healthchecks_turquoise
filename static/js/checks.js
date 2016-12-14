@@ -115,13 +115,15 @@ $(function () {
         $("#nag-timeout").val(rounded);
     });
 
-    var timeout_nag = $(".timeout-nag")
 
-    $(".nag-switch-checkbox").prop("checked", timeout_nag.data("nag_enabled").toLowerCase() == "true").change(
+
+    $(".nag-switch-checkbox").change(
+
         function () {
+            var $this = $(this).closest("td").children("span")
+            $('#nag-timeout-form').prop("action", $this.data("url"));
             $("#nag-enabled").val(this.checked)
-            $("#nag-timeout-form").attr("action", timeout_nag.data("url"));
-            $("#nag-timeout-form").submit()
+            $('#nag-timeout-form').submit()
         }
     )
 

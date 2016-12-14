@@ -72,8 +72,12 @@
             <td class="timeout-cell">
 
             <div class="nag-switch">
-                <input type="checkbox" class="nag-switch-checkbox" id="nag-switch">
-                <label class="nag-switch-label" for="nag-switch"></label>
+                <input type="checkbox" class="nag-switch-checkbox" id={{ check.code }}
+                        {% if check.nag_enabled%}
+                            checked
+                        {% endif %}
+                >
+                <label class="nag-switch-label" for={{ check.code }}></label>
             </div>
 
             <span
