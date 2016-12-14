@@ -6,6 +6,7 @@ import requests
 from six.moves.urllib.parse import quote
 
 from hc.lib import emails
+from hc.api import models
 
 
 def tmpl(template_name, **ctx):
@@ -14,9 +15,8 @@ def tmpl(template_name, **ctx):
 
 
 class Transport(object):
-    def __init__(self, channel, check):
+    def __init__(self, channel):
         self.channel = channel
-        self.check = check
 
     def notify(self, check):
         """ Send notification about current status of the check.
@@ -52,25 +52,13 @@ class Email(Transport):
             if not check.user.profile.team_access_allowed:
                 show_upgrade_note = True
 
-        ### if check has nag enabled, send a nag email, else send normal alert
-        if self.check.nag_enabled:
-            ctx = {
-                "check": check,
-                "checks": self.checks(),
-                "now": timezone.now(),
-                "nag_after": self.check.nag_after,
-                "total_nags": self.check.n_nags,
-                "show_upgrade_note": show_upgrade_note
-            }
-            emails.nag(self.channel.value, ctx)
-        else:
-            ctx = {
-                "check": check,
-                "checks": self.checks(),
-                "now": timezone.now(),
-                "show_upgrade_note": show_upgrade_note
-            }
-            emails.alert(self.channel.value, ctx)
+        ctx = {
+            "check": check,
+            "checks": self.checks(),
+            "now": timezone.now(),
+            "show_upgrade_note": show_upgrade_note
+        }
+        emails.alert(self.channel.value, ctx)
 
 
 class HttpTransport(Transport):
