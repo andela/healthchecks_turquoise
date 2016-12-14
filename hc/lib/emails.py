@@ -19,6 +19,8 @@ def set_password(to, ctx):
 def alert(to, ctx):
     send("alert", to, ctx)
 
+def nag(to, ctx):
+    send("nag", to, ctx)
 
 def verify_email(to, ctx):
     send("verify-email", to, ctx)
