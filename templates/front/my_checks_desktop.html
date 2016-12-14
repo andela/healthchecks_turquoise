@@ -9,8 +9,8 @@
             <span class="checks-subline">Grace</span>
         </th>
         <th class="th-period">
-            Period <br/>
-            <span class="checks-subline">Nag</span>
+            Nag <br/>
+            <span class="checks-subline">Status</span>
         </th>
         <th>Last Ping</th>
         <th></th>
@@ -68,11 +68,18 @@
                 </span>
             </span>
             </td>
+
             <td class="timeout-cell">
+
+            <div class="nag-switch">
+                <input type="checkbox" class="nag-switch-checkbox" id="nag-switch">
+                <label class="nag-switch-label" for="nag-switch"></label>
+            </div>
 
             <span
                     data-url="{% url 'hc-nag-timeout' check.code %}"
                     data-nag_timeout="{{ check.nag_timeout.total_seconds }}"
+                    data-nag_enabled="{{ check.nag_enabled }}"
                     class="timeout-nag">
                 {{ check.nag_timeout|hc_duration }}
             </span>
@@ -128,12 +135,6 @@
                 </div>
 
             </td>
-        <td>
-            <div class="onoffswitch">
-                <input type="checkbox" name="nag_enabled" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-                <label class="onoffswitch-label" for="myonoffswitch"></label>
-            </div>
-        </td>
         </tr>
     {% endfor %}
 

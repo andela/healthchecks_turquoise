@@ -33,7 +33,7 @@ def _pg(cursor):
     DROP TRIGGER IF EXISTS update_nag_after ON api_check;
 
     CREATE TRIGGER update_nag_after
-    BEFORE INSERT OR UPDATE OF last_ping, last_nag, nag_timeout, nag_enabled
+    BEFORE INSERT OR UPDATE OF last_nag, nag_timeout
       ON api_check
     FOR EACH ROW EXECUTE PROCEDURE update_nag_after();
     """)

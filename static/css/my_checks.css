@@ -77,21 +77,21 @@
      margin-top: 15px;
  }
 
- .onoffswitch {
+ .nag-switch {
     position: relative; width: 40px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
-.onoffswitch-checkbox {
+.nag-switch-checkbox {
     display: none;
 }
-.onoffswitch-label {
+.nag-switch-label {
     display: block; overflow: hidden; cursor: pointer;
     height: 17px; padding: 0; line-height: 17px;
     border: 2px solid #FFFFFF; border-radius: 17px;
     background-color: #9E9E9E;
     transition: background-color 0.3s ease-in;
 }
-.onoffswitch-label:before {
+.nag-switch-label:before {
     content: "";
     display: block; width: 17px; margin: 0px;
     background: #FFFFFF;
@@ -100,12 +100,12 @@
     border: 2px solid #FFFFFF; border-radius: 17px;
     transition: all 0.3s ease-in 0s;
 }
-.onoffswitch-checkbox:checked + .onoffswitch-label {
+.nag-switch-checkbox:checked + .nag-switch-label {
     background-color: #42A5F5;
 }
-.onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+.nag-switch-checkbox:checked + .nag-switch-label, .nag-switch-checkbox:checked + .nag-switch-label:before {
    border-color: #42A5F5;
 }
-.onoffswitch-checkbox:checked + .onoffswitch-label:before {
+.nag-switch-checkbox:checked + .nag-switch-label:before {
     right: 0px;
 }

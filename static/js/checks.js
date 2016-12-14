@@ -115,6 +115,15 @@ $(function () {
         $("#nag-timeout").val(rounded);
     });
 
+    var timeout_nag = $(".timeout-nag")
+
+    $(".nag-switch-checkbox").prop("checked", timeout_nag.data("nag_enabled").toLowerCase() == "true").change(
+        function () {
+            $("#nag-enabled").val(this.checked)
+            $("#nag-timeout-form").attr("action", timeout_nag.data("url"));
+            $("#nag-timeout-form").submit()
+        }
+    )
 
     $('[data-toggle="tooltip"]').tooltip();
 
