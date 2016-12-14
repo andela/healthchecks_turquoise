@@ -1,0 +1,14 @@
+Hello,
+
+This is a notification sent by healthchecks.io.
+The check "{{ check.name_then_code }}" is in {{ check.status }} mode.
+This is nag email number: {{ check.n_nags }}.
+
+Here is a summary of all your checks:
+
+{% include 'emails/summary-text.html' %}
+
+--
+Regards,
+healthchecks.io
+
